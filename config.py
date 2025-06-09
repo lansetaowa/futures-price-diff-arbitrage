@@ -1,18 +1,21 @@
 from dotenv import load_dotenv
 import os
 
+# 获取 config.py 的绝对路径
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # load proxies
-load_dotenv('proxy.env')
+load_dotenv(os.path.join(BASE_DIR, 'proxy.env'))
 BINANCE_PROXY = os.getenv('BINANCE_PROXY')
 GATE_PROXY = os.getenv('GATE_PROXY')
 
 # load Gateio api
-load_dotenv("gate_api.env")
+load_dotenv(os.path.join(BASE_DIR, "gate_api.env"))
 GATEIO_API_KEY = os.getenv('G_KEY')
 GATEIO_API_SECRET = os.getenv('G_SECRET')
 
 # load Binance api
-load_dotenv("binance_api.env")
+load_dotenv(os.path.join(BASE_DIR,"binance_api.env"))
 BINANCE_API_KEY = os.getenv('B_KEY')
 BINANCE_API_SECRET = os.getenv('B_SECRET')
 
