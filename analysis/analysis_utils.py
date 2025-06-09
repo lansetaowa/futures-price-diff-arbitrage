@@ -103,6 +103,10 @@ class AnalysisUtils:
         symbol: e.g. "AIOTUSDT"
         """
         merged_df = self.merge_diff_fr(symbol, interval=interval, limit=limit)
+        b_vol = self.bdata_handler.get_24tradevol(symbol)
+        g_vol = self.gdata_handler.get_24tradevol(symbol=symbol.replace("USDT","_USDT"))
+        print(f"binance last 24hour vol in usdt is: {b_vol}")
+        print(f"gate last 24hour vol in usdt is: {g_vol}")
         self.plot_diff_fr(merged_df, symbol)
 
 if __name__ == '__main__':

@@ -128,6 +128,33 @@ class GateDataHandler:
 
         return df
 
+    # 某symbol过去24小时交易量
+    def get_24tradevol(self, symbol):
+
+        try:
+            tickers = self.futures_api.list_futures_tickers(settle='usdt')
+            for t in tickers:
+                if t.contract == symbol:
+                    # print(t)
+                    return t.volume_24h_settle
+
+        except Exception as e:
+            print(f"Can't get futures trade volume info: {e}")
+
+    # 所有tickers
+    def get_tickers(self):
+
+        try:
+            tickers = self.futures_api.list_futures_tickers(settle='usdt')
+            df = pd.DataFrame([{
+                "symbol": t.contract,
+                "last": t.last,
+                "vol_usdt": t.volume_24h_settle
+            } for t in tickers])
+            return df
+        except Exception as e:
+            print(f"Can't get futures tickers: {e}")
+
 class BinanceDataHandler:
 
     def __init__(self, api_key=None, api_secret=None):
@@ -210,13 +237,25 @@ class BinanceDataHandler:
 
         return df
 
+    # Binance上某symbol的过去24小时的成交额
+    def get_24tradevol(self, symbol):
+        try:
+            ticker = self.client.futures_ticker(symbol=symbol)
+            return float(ticker['quoteVolume'])
+        except Exception as e:
+            print(f"Can't get futures trade volume info: {e}")
+
 if __name__ == '__main__':
 
     gdata_handler = GateDataHandler()
     bdata_handler = BinanceDataHandler()
 
-    df = bdata_handler.bi_get_all_contract_status()
-    print(df[df['symbol']=='RAYUSDT'])
+    print()
+
+    # v = gdata_handler.get_24tradevol(symbol='BEAMX_USDT')
+    # print(v)
+    # df = bdata_handler.bi_get_all_contract_status()
+    # print(df[df['symbol']=='RAYUSDT'])
 
     # df = bdata_handler.get_funding_rate_history(symbol='AIOTUSDT')
     # print(df.info())
